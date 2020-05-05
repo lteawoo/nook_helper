@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nookshelper/layout/adaptive.dart';
 
 import 'catalog.dart';
 
@@ -9,10 +10,33 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
-      title: 'Nooks Helper',
-      home: Scaffold(
-        body: Column(
+        title: 'Nooks Helper',
+        home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    final isDesktop = isDisplayDesktop(context);
+
+    if(isDesktop) {
+      debugPrint(isDesktop.toString());
+    }
+    return Scaffold(
+      drawer: _NavDrawer(),
+      body: SafeArea(
+        top: !isDesktop,
+        bottom: !isDesktop,
+        child: Column(
           children: <Widget>[
             _TopBar(),
             Expanded(
@@ -21,6 +45,34 @@ class MyApp extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _NavDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          DrawerHeader(
+            child: Text(
+              'Side menu',
+              style: TextStyle(color: Colors.white, fontSize: 25),
+            ),
+            decoration: BoxDecoration(
+              color: Colors.green,
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.input),
+            title: Text('Welcome'),
+            onTap: () {
+              debugPrint('welcome');
+            },
+          )
+        ],
+      )
     );
   }
 }
